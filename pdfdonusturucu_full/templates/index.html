@@ -1,1 +1,72 @@
-<!doctype html><html lang='tr'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width,initial-scale=1' /><title>pdfdonusturucu</title><link rel='stylesheet' href='/static/style.css'/></head><body><div class='container'><h1>📄↔️ pdfdonusturucu</h1><p>Çevrimiçi sürüm: <strong>PDF → Word</strong>, <strong>Word ↔ Excel</strong> çalışır. Diğerleri masaüstünde.</p>{% with messages = get_flashed_messages() %}{% if messages %}<div class='flash'>{% for m in messages %}<div>{{ m }}</div>{% endfor %}</div>{% endif %}{% endwith %}<div class='grid'><form method='post' action='/convert' enctype='multipart/form-data'><h2>PDF → Word (DOCX)</h2><input type='file' name='file' accept='.pdf' required /><input type='hidden' name='action' value='pdf_to_word' /><button type='submit'>Dönüştür</button></form><form method='post' action='/convert' enctype='multipart/form-data'><h2>Word (DOCX) → PDF</h2><input type='file' name='file' accept='.docx' required /><input type='hidden' name='action' value='word_to_pdf' /><button type='submit'>Dönüştür</button></form><form method='post' action='/convert' enctype='multipart/form-data'><h2>PDF → Excel (XLSX)</h2><input type='file' name='file' accept='.pdf' required /><input type='hidden' name='action' value='pdf_to_excel' /><button type='submit'>Dönüştür</button></form><form method='post' action='/convert' enctype='multipart/form-data'><h2>Excel (XLSX) → PDF</h2><input type='file' name='file' accept='.xlsx' required /><input type='hidden' name='action' value='excel_to_pdf' /><button type='submit'>Dönüştür</button></form><form method='post' action='/convert' enctype='multipart/form-data'><h2>Word (DOCX) → Excel (XLSX)</h2><input type='file' name='file' accept='.docx' required /><input type='hidden' name='action' value='word_to_excel' /><button type='submit'>Dönüştür</button></form><form method='post' action='/convert' enctype='multipart/form-data'><h2>Excel (XLSX) → Word (DOCX)</h2><input type='file' name='file' accept='.xlsx' required /><input type='hidden' name='action' value='excel_to_word' /><button type='submit'>Dönüştür</button></form></div></div></body></html>
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>pdfdonusturucu</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📄↔️ pdfdonusturucu</h1>
+    <p>Aşağıdan dönüşümü seçip dosyayı yükle.</p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">
+          {% for m in messages %}<div>{{ m }}</div>{% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="grid">
+
+      <!-- 1) PDF → Word (MEVCUT ÇALIŞAN YAPIYLA UYUMLU: /convert + hidden action) -->
+      <form method="post" action="/convert" enctype="multipart/form-data">
+        <h2>PDF → Word (DOCX)</h2>
+        <input type="file" name="file" accept=".pdf" required />
+        <input type="hidden" name="action" value="pdf_to_word" />
+        <button type="submit">Dönüştür</button>
+      </form>
+
+      <!-- 2) Word → PDF (MEVCUT ÇALIŞAN YAPIYLA UYUMLU) -->
+      <form method="post" action="/convert" enctype="multipart/form-data">
+        <h2>Word (DOCX) → PDF</h2>
+        <input type="file" name="file" accept=".docx" required />
+        <input type="hidden" name="action" value="word_to_pdf" />
+        <button type="submit">Dönüştür</button>
+      </form>
+
+      <!-- 3) PDF → Excel (MEVCUT ÇALIŞAN YAPIYLA UYUMLU) -->
+      <form method="post" action="/convert" enctype="multipart/form-data">
+        <h2>PDF → Excel (XLSX)</h2>
+        <input type="file" name="file" accept=".pdf" required />
+        <input type="hidden" name="action" value="pdf_to_excel" />
+        <button type="submit">Dönüştür</button>
+      </form>
+
+      <!-- 4) Excel → PDF (YENİ ENDPOINT) -->
+      <form method="post" action="/excel-to-pdf" enctype="multipart/form-data">
+        <h2>Excel (XLSX) → PDF</h2>
+        <input type="file" name="file" accept=".xlsx" required />
+        <button type="submit">Dönüştür</button>
+      </form>
+
+      <!-- 5) Word → Excel (YENİ ENDPOINT) -->
+      <form method="post" action="/word-to-excel" enctype="multipart/form-data">
+        <h2>Word (DOCX) → Excel (XLSX)</h2>
+        <input type="file" name="file" accept=".docx" required />
+        <button type="submit">Dönüştür</button>
+      </form>
+
+      <!-- 6) Excel → Word (YENİ ENDPOINT) -->
+      <form method="post" action="/excel-to-word" enctype="multipart/form-data">
+        <h2>Excel (XLSX) → Word (DOCX)</h2>
+        <input type="file" name="file" accept=".xlsx" required />
+        <button type="submit">Dönüştür</button>
+      </form>
+
+    </div>
+  </div>
+</body>
+</html>
