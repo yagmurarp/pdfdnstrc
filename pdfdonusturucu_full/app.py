@@ -42,6 +42,55 @@ def convert():
     finally:
         try: os.remove(src)
         except Exception: pass
+            
+# en üstte mevcut importların yanına:
+import os, tempfile
+from flask import Flask, request, send_file, render_template
+from converters.excel_ops import excel_to_pdf, excel_to_word
+from converters.word_excel import word_to_excel
+
+# ... senin mevcut app = Flask(__name__) vs ...
+
+@app.post("/excel-to-pdf")
+def route_excel_to_pdf():
+    f = request.files.get("file")
+    if not f: 
+        return "Dosya yok", 400
+    with tempfile.TemporaryDirectory() as tmp:
+        in_path = os.path.join(tmp, f.filename)
+        out_path = os.path.join(tmp, os.path.splitext(f.filename)[0] + ".pdf")
+        f.save(in_path)
+        excel_to_pdf(in_path, out_path)
+        return send_file(out_path, as_attachment=True)
+
+@app.post("/word-to-excel")
+def route_word_to_excel():
+    f = request.files.get("file")
+    if not f: 
+        return "Dosya yok", 400
+    with tempfile.TemporaryDirectory() as tmp:
+        in_path = os.path.join(tmp, f.filename)
+        out_path = os.path.join(tmp, os.path.splitext(f.filename)[0] + ".xlsx")
+        f.save(in_path)
+        word_to_excel(in_path, out_path)
+        return send_file(out_path, as_attachment=True)
+
+@app.post("/excel-to-word")
+def route_excel_to_word():
+    f = request.files.get("file")
+    if not f: 
+        return "Dosya yok", 400
+    with tempfile.TemporaryDirectory() as tmp:
+        in_path = os.path.join(tmp, f.filename)
+        out_path = os.path.join(tmp, os.path.splitext(f.filename)[0] + ".docx")
+        f.save(in_path)
+        excel_to_word(in_path, out_path)
+        return send_file(out_path, as_attachment=True)
+
+# sonda port:
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
 
 if __name__ == "__main__":
     import os
